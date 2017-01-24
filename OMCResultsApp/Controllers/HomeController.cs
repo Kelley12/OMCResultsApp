@@ -1,28 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Data.OleDb;
 using System.Web.Mvc;
+using System.Configuration;
 
 namespace OMCResultsApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly string connString = ConfigurationManager.ConnectionStrings["TracksideConnection"].ConnectionString;
+
         public ActionResult Index()
         {
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Title = "Home";
 
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Series()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Title = "Series";
+
+            return View();
+        }
+
+        public ActionResult Events()
+        {
+            ViewBag.Title = "Events";
+
+            return View();
+        }
+
+        public ActionResult Riders()
+        {
+            ViewBag.Title = "Riders";
+
+            using (var conn = new OleDbConnection(connString))
+            {
+                conn.Open();
+
+                var sqlQuery = "Select * FROM racer_info";
+                var command = new OleDbCommand(sqlQuery, conn);
+                command.ExecuteNonQuery();
+            }
+            return View();
+        }
+
+        public ActionResult Profile()
+        {
+            ViewBag.Title = "Rider Profile";
 
             return View();
         }
