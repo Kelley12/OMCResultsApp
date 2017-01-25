@@ -1,6 +1,8 @@
 ﻿using System.Data.OleDb;
 using System.Web.Mvc;
 using System.Configuration;
+using System.Collections.Generic;
+using OMCResultsApp.ViewModels;
 
 namespace OMCResultsApp.Controllers
 {
@@ -32,16 +34,26 @@ namespace OMCResultsApp.Controllers
         public ActionResult Riders()
         {
             ViewBag.Title = "Riders";
+            
+            return View(GetRiders());
+        }
 
+        public IEnumerable<RiderViewModel> GetRiders()
+        {
             using (var conn = new OleDbConnection(connString))
             {
                 conn.Open();
 
-                var sqlQuery = "Select * FROM racer_info";
+                string sqlQuery = "Select racer_id,fname,lname,racing_nbr,city,state,sponsors FROM racer_info Order by lname";
                 var command = new OleDbCommand(sqlQuery, conn);
-                command.ExecuteNonQuery();
+                OleDbDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    yield return RiderViewModel.Create(reader);
+                }
+
             }
-            return View();
         }
 
         public ActionResult Profile()
