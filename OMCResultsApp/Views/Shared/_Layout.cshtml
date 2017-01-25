@@ -21,9 +21,9 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Series Points", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Race Results", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Rider Profile", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Series Points", "Series", "Home")</li>
+                    <li>@Html.ActionLink("Race Results", "Events", "Home")</li>
+                    <li>@Html.ActionLink("Rider Profiles", "Riders", "Home")</li>
                 </ul>
                 @using (Html.BeginForm("Riders", "Home", FormMethod.Post, new { @class = "navbar-form navbar-left", @role = "search" }))
                 {

@@ -1,7 +1,27 @@
-﻿
-@{
-    ViewBag.Title = "Series";
-}
+﻿@model IEnumerable<OMCResultsApp.ViewModels.SeriesViewModel>
 
-<h2>Series</h2>
+<div class="jumbotron">
+    <h2>@ViewBag.Title</h2>
+    <p>@ViewBag.Message</p>
+</div>
 
+<table class="table table-striped table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SeriestName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeriestName)
+            </td>
+            <td>
+                @Html.ActionLink("View Series", "Events", new { id = item.SeriesId }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
+</table>

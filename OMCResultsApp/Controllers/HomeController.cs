@@ -20,22 +20,60 @@ namespace OMCResultsApp.Controllers
         public ActionResult Series()
         {
             ViewBag.Title = "Series";
+            ViewBag.Message = "Select a series from the list below.";
 
-            return View();
+            return View(GetSeries());
+        }
+
+        public IEnumerable<SeriesViewModel> GetSeries()
+        {
+            using (var conn = new OleDbConnection(connString))
+            {
+                conn.Open();
+
+                string sqlQuery = "SELECT series_id,series_desc FROM series ORDER BY series_id DESC";
+                var command = new OleDbCommand(sqlQuery, conn);
+                OleDbDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    yield return SeriesViewModel.Create(reader);
+                }
+            }
         }
 
         public ActionResult Events()
         {
             ViewBag.Title = "Events";
+            ViewBag.Message = "Select an event from the list below.";
 
-            return View();
+            return View(GetEvents());
+        }
+
+        public IEnumerable<EventViewModel> GetEvents()
+        {
+            using (var conn = new OleDbConnection(connString))
+            {
+                conn.Open();
+
+                string sqlQuery = "SELECT event_id, event_name,event_date FROM event_data ORDER BY event_date DESC";
+                var command = new OleDbCommand(sqlQuery, conn);
+                OleDbDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    yield return EventViewModel.Create(reader);
+                }
+            }
         }
 
         [HttpPost]
         public ActionResult Riders(string searchText = null)
         {
             ViewBag.Title = "Riders";
-            
+            ViewBag.Message = "Search for a rider using the box in the menu above.";
+
+
             return View(GetRiders(searchText));
         }
 
@@ -61,7 +99,6 @@ namespace OMCResultsApp.Controllers
                 {
                     yield return RiderViewModel.Create(reader);
                 }
-
             }
         }
 
