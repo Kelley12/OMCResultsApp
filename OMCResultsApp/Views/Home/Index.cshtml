@@ -17,13 +17,13 @@
     <div class="col-md-4">
         <h2>Racer Search</h2>
         <p>Search for a racer using First Name, Last Name, or Rider Number.</p>
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("Riders", "Home", FormMethod.Post, new { @class = "navbar-form navbar-left", @role = "search" }))
         {
             <p>
                 <div class="form-group">
-                    @Html.TextBox("SearchText", null, new { @class = "form-control", @placeholder = "Search" })
+                    @Html.TextBox("searchText", null, new { @class = "form-control", @placeholder = "Rider Name or Number" })
                 </div>
-                <input type="submit" class="btn btn-default" value="Search" />
+                <button type="submit" class="btn btn-default">Submit</button>
             </p>
         }
     </div>

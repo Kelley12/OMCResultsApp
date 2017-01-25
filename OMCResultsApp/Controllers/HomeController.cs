@@ -31,20 +31,29 @@ namespace OMCResultsApp.Controllers
             return View();
         }
 
-        public ActionResult Riders()
+        [HttpPost]
+        public ActionResult Riders(string searchText = null)
         {
             ViewBag.Title = "Riders";
             
-            return View(GetRiders());
+            return View(GetRiders(searchText));
         }
 
-        public IEnumerable<RiderViewModel> GetRiders()
+        public IEnumerable<RiderViewModel> GetRiders(string searchText)
         {
+            string sqlQuery = null;
             using (var conn = new OleDbConnection(connString))
             {
                 conn.Open();
 
-                string sqlQuery = "Select racer_id,fname,lname,racing_nbr,city,state,sponsors FROM racer_info Order by lname";
+                if (string.IsNullOrEmpty(searchText))
+                {
+                    sqlQuery = "Select racer_id,fname,lname,racing_nbr,city,state,sponsors FROM racer_info Order by lname";
+                }
+                else
+                {
+                    sqlQuery = "Select racer_id, fname, lname, racing_nbr, city, state, sponsors FROM racer_info WHERE fname like '%" + searchText + "%' or lname like '%" + searchText + "%' or fname + ' ' + lname like '%" + searchText + "%' or racing_nbr like '%" + searchText + "%' Order by lname";
+                }
                 var command = new OleDbCommand(sqlQuery, conn);
                 OleDbDataReader reader = command.ExecuteReader();
 
