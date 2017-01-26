@@ -1,0 +1,27 @@
+﻿@model IEnumerable<OMCResultsApp.ViewModels.ResultsViewModel>
+
+<div class="jumbotron">
+    <h2>@ViewBag.Title</h2>
+    <p>@Model.First().ClassDescription</p>
+</div>
+
+<table class="table table-striped table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("View Profile", "Profile", new { id = item.RacerId }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
+</table>

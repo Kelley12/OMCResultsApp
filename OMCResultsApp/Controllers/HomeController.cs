@@ -67,6 +67,64 @@ namespace OMCResultsApp.Controllers
             }
         }
 
+        public ActionResult Classes(int? id)
+        {
+            ViewBag.Title = "Classes";
+            ViewBag.Message = "";
+
+            if(id == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(GetClasses(id));
+        }
+
+        public IEnumerable<ClassViewModel> GetClasses(int? EventId)
+        {
+            using (var conn = new OleDbConnection(connString))
+            {
+                conn.Open();
+
+                string sqlQuery = "SELECT event_id, [class].class_id, class_desc FROM (event_classes INNER JOIN [class] ON [event_classes].class_id = [class].class_id) WHERE event_id = " + EventId;
+                var command = new OleDbCommand(sqlQuery, conn);
+                OleDbDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    yield return ClassViewModel.Create(reader);
+                }
+            }
+        }
+
+        public ActionResult Results(int EventId, int ClassId)
+        {
+            ViewBag.Title = "Results";
+            ViewBag.Message = "";
+            
+            return View(GetResults(EventId, ClassId));
+        }
+
+        public IEnumerable<ResultsViewModel> GetResults(int EventId, int ClassId)
+        {
+            using (var conn = new OleDbConnection(connString))
+            {
+                conn.Open();
+
+                string sqlQuery = "SELECT [event_data].event_id, [event_data].event_name, [event_data].event_date, [class].class_id, [class].class_desc, [racer_info].racer_id, fname + ' ' + lname AS Name, city + ', ' + state AS Location, [event_entries].moto_1_finish, [event_entries].moto_2_finish, [event_entries].overall_finish ";
+                sqlQuery += "FROM(([event_data] INNER JOIN[event_entries] ON [event_data].event_id = [event_entries].event_id) INNER JOIN [racer_info] ON [event_entries].racer_id = [racer_info].racer_id) ";
+                sqlQuery += "INNER JOIN[class] ON [event_entries].class_id = [class].class_id WHERE [class].class_id = " + ClassId + " AND [event_data].event_id = " + EventId + " ORDER BY [event_entries].overall_finish";
+
+                var command = new OleDbCommand(sqlQuery, conn);
+                OleDbDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    yield return ResultsViewModel.Create(reader);
+                }
+            }
+        }
+
         [HttpPost]
         public ActionResult Riders(string searchText = null)
         {
