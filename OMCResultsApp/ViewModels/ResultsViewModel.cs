@@ -20,10 +20,16 @@ namespace OMCResultsApp.ViewModels
         [DisplayName("Class Description")]
         public string ClassDescription { get; set; }
         public int RacerId { get; set; }
+        [DisplayName("Rider")]
         public string Name { get; set; }
+        [DisplayName("Rider Number")]
+        public string Number { get; set; }
         public string Location { get; set; }
+        [DisplayName("Moto 1")]
         public int Moto1Finish { get; set; }
+        [DisplayName("Moto 2")]
         public int Moto2Finish { get; set; }
+        [DisplayName("Overall")]
         public int OverallFinish { get; set; }
 
         public static ResultsViewModel Create(OleDbDataReader reader)
@@ -37,10 +43,11 @@ namespace OMCResultsApp.ViewModels
                 ClassDescription = reader["class_desc"].ToString(),
                 RacerId = (int) reader["racer_id"],
                 Name = reader["Name"].ToString(),
+                Number = reader["racing_nbr"].ToString(),
                 Location = reader["Location"].ToString(),
-                //Moto1Finish = String.IsNullOrEmpty(reader["moto_1_finish"].ToString()) ? 99 : (int) reader["moto_1_finish"],
-                //Moto2Finish = String.IsNullOrEmpty(reader["moto_2_finish"].ToString()) ? 99 : (int) reader["moto_2_finish"],
-                //OverallFinish = String.IsNullOrEmpty(reader["overall_finish"].ToString()) ? 99 : (int) reader["overall_finish"]
+                Moto1Finish = String.IsNullOrEmpty(reader["moto_1_finish"].ToString()) ? 89 : Int32.Parse(reader["moto_1_finish"].ToString()),
+                Moto2Finish = String.IsNullOrEmpty(reader["moto_2_finish"].ToString()) ? 89 : Int32.Parse(reader["moto_2_finish"].ToString()),
+                OverallFinish = String.IsNullOrEmpty(reader["overall_finish"].ToString()) ? 89 : Int32.Parse(reader["overall_finish"].ToString())
             };
         }
     }

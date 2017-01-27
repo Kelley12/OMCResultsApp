@@ -8,7 +8,19 @@
 <table class="table table-striped table-hover">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.Number)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Moto1Finish)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Moto2Finish)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OverallFinish)
         </th>
         <th></th>
     </tr>
@@ -17,7 +29,19 @@
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Number)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Moto1Finish)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Moto2Finish)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OverallFinish)
             </td>
             <td>
                 @Html.ActionLink("View Profile", "Profile", new { id = item.RacerId }, new { @class = "btn btn-primary" })

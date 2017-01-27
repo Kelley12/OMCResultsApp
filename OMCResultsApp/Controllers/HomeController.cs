@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Configuration;
 using System.Collections.Generic;
 using OMCResultsApp.ViewModels;
+using System;
 
 namespace OMCResultsApp.Controllers
 {
@@ -111,7 +112,7 @@ namespace OMCResultsApp.Controllers
             {
                 conn.Open();
 
-                string sqlQuery = "SELECT [event_data].event_id, [event_data].event_name, [event_data].event_date, [class].class_id, [class].class_desc, [racer_info].racer_id, fname + ' ' + lname AS Name, city + ', ' + state AS Location, [event_entries].moto_1_finish, [event_entries].moto_2_finish, [event_entries].overall_finish ";
+                string sqlQuery = "SELECT [event_data].event_id, [event_data].event_name, [event_data].event_date, [class].class_id, [class].class_desc, [racer_info].racer_id, fname + ' ' + lname AS Name, [event_entries].racing_nbr, city + ', ' + state AS Location, [event_entries].moto_1_finish, [event_entries].moto_2_finish, [event_entries].overall_finish ";
                 sqlQuery += "FROM(([event_data] INNER JOIN[event_entries] ON [event_data].event_id = [event_entries].event_id) INNER JOIN [racer_info] ON [event_entries].racer_id = [racer_info].racer_id) ";
                 sqlQuery += "INNER JOIN[class] ON [event_entries].class_id = [class].class_id WHERE [class].class_id = " + ClassId + " AND [event_data].event_id = " + EventId + " ORDER BY [event_entries].overall_finish";
 
