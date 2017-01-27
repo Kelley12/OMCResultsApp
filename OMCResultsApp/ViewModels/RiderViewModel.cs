@@ -9,7 +9,6 @@ namespace OMCResultsApp.ViewModels
         { }
 
         public int RacerId { get; set; }
-        [DisplayName("Name")]
         public string Name { get; set; }
         public string Number { get; set; }
         public string City { get; set; }

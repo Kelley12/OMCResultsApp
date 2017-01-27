@@ -20,7 +20,7 @@
                 @Html.DisplayFor(modelItem => item.SeriestName)
             </td>
             <td>
-                @Html.ActionLink("View Series", "Events", new { id = item.SeriesId }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("View Series", "Events", new { SeriesId = item.SeriesId }, new { @class = "btn btn-primary" })
             </td>
         </tr>
     }

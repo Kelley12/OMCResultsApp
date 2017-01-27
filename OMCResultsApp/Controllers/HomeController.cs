@@ -43,21 +43,21 @@ namespace OMCResultsApp.Controllers
             }
         }
 
-        public ActionResult Events()
+        public ActionResult Events(int SeriesId)
         {
             ViewBag.Title = "Events";
             ViewBag.Message = "Select an event from the list below.";
 
-            return View(GetEvents());
+            return View(GetEvents(SeriesId));
         }
 
-        public IEnumerable<EventViewModel> GetEvents()
+        public IEnumerable<EventViewModel> GetEvents(int SeriesId)
         {
             using (var conn = new OleDbConnection(connString))
             {
                 conn.Open();
 
-                string sqlQuery = "SELECT event_id, event_name,event_date FROM event_data ORDER BY event_date DESC";
+                string sqlQuery = "SELECT event_id, event_name,event_date FROM event_data WHERE series_id = " + SeriesId + " ORDER BY event_date DESC";
                 var command = new OleDbCommand(sqlQuery, conn);
                 OleDbDataReader reader = command.ExecuteReader();
 
@@ -68,26 +68,21 @@ namespace OMCResultsApp.Controllers
             }
         }
 
-        public ActionResult Classes(int? id)
+        public ActionResult Classes(int EventId)
         {
             ViewBag.Title = "Classes";
             ViewBag.Message = "";
-
-            if(id == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(GetClasses(id));
+            
+            return View(GetClasses(EventId));
         }
 
-        public IEnumerable<ClassViewModel> GetClasses(int? EventId)
+        public IEnumerable<ClassViewModel> GetClasses(int EventId)
         {
             using (var conn = new OleDbConnection(connString))
             {
                 conn.Open();
 
-                string sqlQuery = "SELECT event_id, [class].class_id, class_desc FROM (event_classes INNER JOIN [class] ON [event_classes].class_id = [class].class_id) WHERE event_id = " + EventId;
+                string sqlQuery = "SELECT distinct event_id, [class].class_id, class_desc FROM (event_entries INNER JOIN [class] ON [event_entries].class_id = [class].class_id) WHERE event_id = " + EventId;
                 var command = new OleDbCommand(sqlQuery, conn);
                 OleDbDataReader reader = command.ExecuteReader();
 
@@ -114,7 +109,7 @@ namespace OMCResultsApp.Controllers
 
                 string sqlQuery = "SELECT [event_data].event_id, [event_data].event_name, [event_data].event_date, [class].class_id, [class].class_desc, [racer_info].racer_id, fname + ' ' + lname AS Name, [event_entries].racing_nbr, city + ', ' + state AS Location, [event_entries].moto_1_finish, [event_entries].moto_2_finish, [event_entries].overall_finish ";
                 sqlQuery += "FROM(([event_data] INNER JOIN[event_entries] ON [event_data].event_id = [event_entries].event_id) INNER JOIN [racer_info] ON [event_entries].racer_id = [racer_info].racer_id) ";
-                sqlQuery += "INNER JOIN[class] ON [event_entries].class_id = [class].class_id WHERE [class].class_id = " + ClassId + " AND [event_data].event_id = " + EventId + " ORDER BY [event_entries].overall_finish";
+                sqlQuery += "INNER JOIN[class] ON [event_entries].class_id = [class].class_id WHERE [event_data].event_id = " + EventId + " AND [class].class_id = " + ClassId + " ORDER BY [event_entries].overall_finish";
 
                 var command = new OleDbCommand(sqlQuery, conn);
                 OleDbDataReader reader = command.ExecuteReader();
@@ -145,11 +140,11 @@ namespace OMCResultsApp.Controllers
 
                 if (string.IsNullOrEmpty(searchText))
                 {
-                    sqlQuery = "Select racer_id,fname,lname,racing_nbr,city,state,sponsors FROM racer_info Order by lname";
+                    sqlQuery = "Select racer_id,fname + ' ' + lname AS Name,racing_nbr,city,state,sponsors FROM racer_info Order by lname";
                 }
                 else
                 {
-                    sqlQuery = "Select racer_id, fname, lname, racing_nbr, city, state, sponsors FROM racer_info WHERE fname like '%" + searchText + "%' or lname like '%" + searchText + "%' or fname + ' ' + lname like '%" + searchText + "%' or racing_nbr like '%" + searchText + "%' Order by lname";
+                    sqlQuery = "Select racer_id, fname + ' ' + lname AS Name, racing_nbr, city, state, sponsors FROM racer_info WHERE fname like '%" + searchText + "%' or lname like '%" + searchText + "%' or fname + ' ' + lname like '%" + searchText + "%' or racing_nbr like '%" + searchText + "%' Order by lname";
                 }
                 var command = new OleDbCommand(sqlQuery, conn);
                 OleDbDataReader reader = command.ExecuteReader();
