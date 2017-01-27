@@ -161,11 +161,25 @@ namespace OMCResultsApp.Controllers
             }
         }
 
-        public ActionResult Profile()
+        public ActionResult Profile(int id)
         {
-            ViewBag.Title = "Rider Profile";
+            return View(GetRiderProfile(id));
+        }
+        
+        public RiderViewModel GetRiderProfile(int RiderId)
+        {
+            using (var conn = new OleDbConnection(connString))
+            {
+                conn.Open();
 
-            return View();
+                string sqlQuery = "SELECT racer_id, fname + ' ' + lname AS Name, racing_nbr, city, state, sponsors from [racer_info] WHERE racer_id = " + RiderId;
+                
+                var command = new OleDbCommand(sqlQuery, conn);
+                OleDbDataReader reader = command.ExecuteReader();
+
+                reader.Read();
+                return RiderViewModel.Create(reader);
+            }
         }
     }
 }
