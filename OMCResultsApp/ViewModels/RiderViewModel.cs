@@ -9,10 +9,7 @@ namespace OMCResultsApp.ViewModels
         { }
 
         public int RacerId { get; set; }
-        [DisplayName("First Name")]
-        public string FirstName { get; set; }
-        [DisplayName("Last Name")]
-        public string LastName { get; set; }
+        public string Name { get; set; }
         public string Number { get; set; }
         public string City { get; set; }
         public string State { get; set; }
@@ -23,8 +20,7 @@ namespace OMCResultsApp.ViewModels
             return new RiderViewModel
             {
                 RacerId = (int) reader["racer_id"],
-                FirstName = reader["fname"].ToString(),
-                LastName = reader["lname"].ToString(),
+                Name = reader["Name"].ToString(),
                 Number = reader["racing_nbr"].ToString(),
                 City = reader["city"].ToString(),
                 State = reader["state"].ToString(),

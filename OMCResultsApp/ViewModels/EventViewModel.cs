@@ -14,7 +14,7 @@ namespace OMCResultsApp.ViewModels
         [DisplayName("Event Name")]
         public string EventName { get; set; }
         [DisplayName("Event Date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:M/d/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EventDate { get; set; }
 
         public static EventViewModel Create(OleDbDataReader reader)
